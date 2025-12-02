@@ -1,4 +1,5 @@
 #include <Adafruit_PWMServoDriver.h>
+#include "../include/commandLine.h"
 
 Adafruit_PWMServoDriver servoDriver = Adafruit_PWMServoDriver();
 
@@ -46,12 +47,6 @@ Adafruit_PWMServoDriver servoDriver = Adafruit_PWMServoDriver();
 #define JOINT_TYPE_L2 4
 #define JOINT_TYPE_L3 5
 
-#define ACTION_STOP 0
-#define ACTION_LOOP 1
-
-const byte maxChars = 20;
-char inputChars[maxChars];
-boolean hasNewInput = false;
 uint16_t servo_LF2_pulselength = 335;
 uint16_t pulselength = 335;
 int angleStart = 20;
@@ -59,10 +54,6 @@ int angleEnd = 45;
 int angleLoop;
 bool angleLoopInc;
 bool doLoop;
-
-int newCommand[3];
-int currentCommand[3];  // Contains the action (code) and parameters (2) which is currently executed
-bool hasNewCommand = false;
 
 int getJointType(int joint) {
   int jointTypes[18] = {
@@ -207,57 +198,6 @@ void setup() {
   Serial.println("Send commands via Serial Monitor: loop(x,y) or stop.");
 }
 
-void readInputLine() {
-  static byte index = 0;
-
-  while (Serial.available() > 0 && hasNewInput == false) {
-    const char endMarker = '\n';
-    const char receivedCharacter = Serial.read();
-
-    if (receivedCharacter != endMarker) {
-      inputChars[index] = receivedCharacter;
-      index++;
-    }
-
-    if (receivedCharacter == endMarker || index == maxChars) {
-      // Terminate string
-      inputChars[index] = '\0';
-      index = 0;
-      hasNewInput = true;
-    }
-  }
-}
-
-String getInputLine() {
-  hasNewInput = false;
-  return String(inputChars);
-}
-
-// Supported commands:
-// loop(x,y) : newCommand = {1,x,y}
-// stop      : newCommand = {0,}
-void readNewCommand(String inputLine) {
-  const byte posOpeningBracket = inputLine.indexOf('(');
-  const byte posComma = inputLine.indexOf(',');
-  const byte posClosingBracket = inputLine.indexOf(')');
-  const String commandString = inputLine.substring(0, posOpeningBracket);
-  int command = 0;
-  const int paramOne = inputLine.substring(posOpeningBracket+1, posComma).toInt();
-  const int paramTwo = inputLine.substring(posComma+1, posClosingBracket).toInt();
-
-  if (commandString == "stop") {
-    command = ACTION_STOP;
-  } else if (commandString == "loop") {
-    command = ACTION_LOOP;
-  }
-
-  newCommand[0] = command;
-  newCommand[1] = paramOne;
-  newCommand[2] = paramTwo;
-
-  hasNewCommand = true;
-}
-
 void loop() {
   readInputLine();
 
@@ -284,7 +224,7 @@ void loop() {
     setAngle(angleLoop, JOINT_LF3);
   }
 
-  if (hasNewInput == true) {
+  if (hasNewInput() == true) {
     const String inputLine = getInputLine();
     Serial.print("Received new input: ");
     Serial.println(inputLine);
