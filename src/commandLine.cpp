@@ -6,6 +6,7 @@
 #define ACTION_STOP 0
 #define ACTION_LOOP 1
 
+// Define the variables declared as extern in commandLine.h
 const byte maxChars = 20;
 char inputChars[maxChars];
 bool _hasNewInput = false;

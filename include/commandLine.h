@@ -6,8 +6,8 @@
 #define ACTION_STOP 0
 #define ACTION_LOOP 1
 
-extern const byte maxChars = 20;
-extern char inputChars[maxChars];
+extern const byte maxChars;
+extern char inputChars[];
 extern int newCommand[3];
 extern int currentCommand[3];  // Contains the action (code) and parameters (2) which is currently executed
 extern bool hasNewCommand;
