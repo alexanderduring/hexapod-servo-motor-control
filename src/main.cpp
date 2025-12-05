@@ -215,7 +215,7 @@ void loop() {
         angleLoop--;
       }
       if (angleLoop <= angleStart) {
-        angleLoop = angleStart,
+        angleLoop = angleStart;
         angleLoopInc = true;
       }
     }
