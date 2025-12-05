@@ -125,7 +125,7 @@ int calculatePulseWidth(const double angle, const int joint) {
   // We define a servo angle of 0° when the two screws form a line which is perpendicular to the servo casing.
   // This is true at a pulse width = SERVO_LEFT_FRONT_THREE_HORIZONTAL
 
-  double angleServo;
+  double angleServo = 0;  // Initialize to prevent undefined behavior
 
   int jointType = getJointType(joint);
 
@@ -142,6 +142,12 @@ int calculatePulseWidth(const double angle, const int joint) {
       // joint angle inc -> servo angle inc
       // servo angle = joint angle - 45°
       angleServo = angle - 45;
+      break;
+    default:
+      // TODO: Implement angle calculations for other joint types (R1, R2, R3, L1)
+      Serial.print("Warning: No angle calculation implemented for joint type ");
+      Serial.println(jointType);
+      angleServo = 0;  // Safe default
       break;
   }
 
