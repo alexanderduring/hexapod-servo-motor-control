@@ -1,9 +1,6 @@
-#include <Adafruit_PWMServoDriver.h>
 #include "../include/commandLine.h"
 #include "../include/servoConfig.h"
-#include "../include/hexapodKinematics.h"
-
-Adafruit_PWMServoDriver servoDriver = Adafruit_PWMServoDriver();
+#include "../include/servoControl.h"
 
 // Application state variables
 uint16_t servo_LF2_pulselength = 335;
@@ -14,34 +11,11 @@ int angleLoop;
 bool angleLoopInc;
 bool doLoop;
 
-void setAngle(const double angle, const int joint) {
-  const int servoNumber = getServoNumber(joint);
-
-  // Check if getServoNumber returned an error
-  if (servoNumber < 0) {
-    Serial.println("Error: Cannot set angle for invalid joint");
-    return;
-  }
-
-  // Check if servo is mapped (99 means unmapped)
-  if (servoNumber == 99) {
-    Serial.print("Warning: Joint ");
-    Serial.print(joint);
-    Serial.println(" is not mapped to a servo");
-    return;
-  }
-
-  const int pulseWidth = calculatePulseWidth(angle, joint);
-  servoDriver.setPWM(servoNumber, 0, pulseWidth);
-}
-
 void setup() {
   Serial.begin(9600);
   Serial.println("Starting...");
 
-  servoDriver.begin();
-  servoDriver.setPWMFreq(50);
-  delay(10);
+  initializeServoDriver();
 
   currentCommand[0] = ACTION_STOP;
   currentCommand[1] = 0;
