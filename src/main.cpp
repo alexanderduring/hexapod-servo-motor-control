@@ -1,52 +1,10 @@
 #include <Adafruit_PWMServoDriver.h>
 #include "../include/commandLine.h"
+#include "../include/servoConfig.h"
 
 Adafruit_PWMServoDriver servoDriver = Adafruit_PWMServoDriver();
 
-// Depending on your servo make, the pulse width min and max may vary, you
-// want these to be as small/large as possible without hitting the hard stop
-// for max range. You'll have to tweak them as necessary to match the servos you
-// have!
-
-// The Adafruit PWM Servo Driver has a resolution of 4096 per pulse.
-// Given a pwm frequency of 50 Hz, you get 50 pulses per second
-// One pulse takes 20 ms or 20.000 µs
-// The Servo Driver resolution splits those into 20.000 µs / 4096 = 4.8828125 µs steps
-// which we can use to configure our pulse width:
-// A setting of e.g. 190 corresponds to a pulse width of 190 steps * 4.88 µs = 928 µs
-
-#define SERVOMIN  300 // 150 // This is the 'minimum' pulse length count (out of 4096)
-#define SERVOMAX  500 // This is the 'maximum' pulse length count (out of 4096)
-#define USMIN  600 // This is the rounded 'minimum' microsecond length based on the minimum pulse of 150
-#define USMAX  2400 // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
-#define SERVO_FREQ 50 // Most analog servos are optimized for a pwm frequency of ~50 Hz.
-
-// Hitec HS-300: Pulse Width: 900-2100 µs over 20ms
-
-// Increase of pulse width turns the wheel clockwise
-
-                                                 // Servo angle
-#define SERVO_LF2_PULSEWIDTH_MIN 238             // -45 degrees
-#define SERVO_LF2_PULSEWIDTH_HORIZONTAL 335      //   0 degrees
-#define SERVO_LF2_PULSEWIDTH_MAX 432             //  45 degrees clockwise
-#define SERVO_LF2_PULSEWIDTH_PER_DEGREE 2.15555
-
-#define SERVO_LF3_PULSEWIDTH_MIN 278             // -45 degrees
-#define SERVO_LF3_PULSEWIDTH_HORIZONTAL 335      //   0 degrees
-#define SERVO_LF3_PULSEWIDTH_MAX 428             //  45 degrees clockwise
-#define SERVO_LF3_PULSEWIDTH_PER_DEGREE 2
-
-#define JOINT_LF1 9
-#define JOINT_LF2 10
-#define JOINT_LF3 11
-
-#define JOINT_TYPE_R1 0
-#define JOINT_TYPE_R2 1
-#define JOINT_TYPE_R3 2
-#define JOINT_TYPE_L1 3
-#define JOINT_TYPE_L2 4
-#define JOINT_TYPE_L3 5
-
+// Application state variables
 uint16_t servo_LF2_pulselength = 335;
 uint16_t pulselength = 335;
 int angleStart = 20;
@@ -54,27 +12,6 @@ int angleEnd = 45;
 int angleLoop;
 bool angleLoopInc;
 bool doLoop;
-
-int getJointType(int joint) {
-  // Bounds checking to prevent buffer overflow
-  if (joint < 0 || joint >= 18) {
-    Serial.print("Error: Invalid joint number ");
-    Serial.print(joint);
-    Serial.println(". Valid range: 0-17");
-    return -1;  // Return error code
-  }
-
-  int jointTypes[18] = {
-    JOINT_TYPE_R1,JOINT_TYPE_R2,JOINT_TYPE_R3, // Right front
-    JOINT_TYPE_R1,JOINT_TYPE_R2,JOINT_TYPE_R3, // Right middle
-    JOINT_TYPE_R1,JOINT_TYPE_R2,JOINT_TYPE_R3, // Right back
-    JOINT_TYPE_L1,JOINT_TYPE_L2,JOINT_TYPE_L3, // Left front
-    JOINT_TYPE_L1,JOINT_TYPE_L2,JOINT_TYPE_L3, // Left middle
-    JOINT_TYPE_L1,JOINT_TYPE_L2,JOINT_TYPE_L3  // Left back
-  };
-
-  return jointTypes[joint];
-}
 
 double restrictServoAngle(const double angleServo, const int jointType) {
   double restrictedAngle = angleServo;
@@ -168,27 +105,6 @@ int calculatePulseWidth(const double angle, const int joint) {
   const int pulseWidth = transformServoAngleIntoPulseWidth(angleServo, joint);
 
   return pulseWidth;
-}
-
-int getServoNumber(int joint) {
-  // Bounds checking to prevent buffer overflow
-  if (joint < 0 || joint >= 18) {
-    Serial.print("Error: Invalid joint number ");
-    Serial.print(joint);
-    Serial.println(". Valid range: 0-17");
-    return -1;  // Return error code
-  }
-
-  const int servos[18] = {
-    99,99,99, // Right front
-    99,99,99, // Right middle
-    99,99,99, // Right back
-    99,0,1, // Left front
-    99,99,99, // Left middle
-    99,99,99  // Left back
-  };
-
-  return servos[joint];
 }
 
 void setAngle(const double angle, const int joint) {
