@@ -56,6 +56,14 @@ bool angleLoopInc;
 bool doLoop;
 
 int getJointType(int joint) {
+  // Bounds checking to prevent buffer overflow
+  if (joint < 0 || joint >= 18) {
+    Serial.print("Error: Invalid joint number ");
+    Serial.print(joint);
+    Serial.println(". Valid range: 0-17");
+    return -1;  // Return error code
+  }
+
   int jointTypes[18] = {
     JOINT_TYPE_R1,JOINT_TYPE_R2,JOINT_TYPE_R3, // Right front
     JOINT_TYPE_R1,JOINT_TYPE_R2,JOINT_TYPE_R3, // Right middle
@@ -163,6 +171,14 @@ int calculatePulseWidth(const double angle, const int joint) {
 }
 
 int getServoNumber(int joint) {
+  // Bounds checking to prevent buffer overflow
+  if (joint < 0 || joint >= 18) {
+    Serial.print("Error: Invalid joint number ");
+    Serial.print(joint);
+    Serial.println(". Valid range: 0-17");
+    return -1;  // Return error code
+  }
+
   const int servos[18] = {
     99,99,99, // Right front
     99,99,99, // Right middle
@@ -176,8 +192,24 @@ int getServoNumber(int joint) {
 }
 
 void setAngle(const double angle, const int joint) {
+  const int servoNumber = getServoNumber(joint);
+
+  // Check if getServoNumber returned an error
+  if (servoNumber < 0) {
+    Serial.println("Error: Cannot set angle for invalid joint");
+    return;
+  }
+
+  // Check if servo is mapped (99 means unmapped)
+  if (servoNumber == 99) {
+    Serial.print("Warning: Joint ");
+    Serial.print(joint);
+    Serial.println(" is not mapped to a servo");
+    return;
+  }
+
   const int pulseWidth = calculatePulseWidth(angle, joint);
-  servoDriver.setPWM(getServoNumber(joint), 0, pulseWidth);
+  servoDriver.setPWM(servoNumber, 0, pulseWidth);
 }
 
 void setup() {
