@@ -27,15 +27,16 @@ void readInputLine() {
     static byte index = 0;
 
     while (Serial.available() > 0 && _hasNewInput == false) {
-        const char endMarker = '\n';
+        const char carriageReturn = '\r';
+        const char lineFeed = '\n';
         const char receivedCharacter = Serial.read();
 
-        if (receivedCharacter != endMarker) {
+        if (receivedCharacter != carriageReturn && receivedCharacter != lineFeed) {
             inputChars[index] = receivedCharacter;
             index++;
         }
 
-        if (receivedCharacter == endMarker || index == maxChars) {
+        if (receivedCharacter == lineFeed || index == maxChars) {
             // Terminate string
             inputChars[index] = '\0';
             index = 0;
