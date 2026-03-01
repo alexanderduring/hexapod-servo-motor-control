@@ -22,7 +22,7 @@ int getJointType(int joint) {
   return jointTypes[joint];
 }
 
-int getServoNumber(int joint) {
+int getServoNumberOnDriver(int joint) {
   // Bounds checking to prevent buffer overflow
   if (joint < 0 || joint >= 18) {
     Serial.print("Error: Invalid joint number ");
@@ -31,7 +31,7 @@ int getServoNumber(int joint) {
     return -1;  // Return error code
   }
 
-  const int servos[18] = {
+  const int jointToDriverChannelMapping[18] = {
     99,99,99, // Right front
     99,99,99, // Right middle
     99,99,99, // Right back
@@ -40,5 +40,5 @@ int getServoNumber(int joint) {
     99,99,99  // Left back
   };
 
-  return servos[joint];
+  return jointToDriverChannelMapping[joint];
 }

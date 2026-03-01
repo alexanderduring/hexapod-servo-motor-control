@@ -72,6 +72,6 @@ int getJointType(int joint);
 
 // Get the PWM channel number for a given joint number (0-17)
 // Returns: PWM channel (0-15), 99 for unmapped, or -1 on error
-int getServoNumber(int joint);
+int getServoNumberOnDriver(int joint);
 
 #endif //HEXAPOD_SERVO_MOTOR_CONTROL_SERVOCONFIG_H
