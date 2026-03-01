@@ -4,8 +4,9 @@
 #include <Arduino.h>
 #include <WString.h>
 
-#define ACTION_STOP 0
-#define ACTION_LOOP 1
+#define ACTION_STOP  0
+#define ACTION_LOOP  1
+#define ACTION_PULSE 2
 
 extern const byte maxChars;
 extern char inputChars[];

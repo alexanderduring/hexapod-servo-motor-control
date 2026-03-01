@@ -65,7 +65,7 @@ const int JOINT_TO_DRIVER_CHANNEL[18] = {
   99,99,99, // Right front
   99,99,99, // Right middle
   99,99,99, // Right back
-  99,0,1,   // Left front
+  0,1,2,   // Left front
   99,99,99, // Left middle
   99,99,99  // Left back
 };

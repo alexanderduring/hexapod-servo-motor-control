@@ -33,3 +33,9 @@ void setAngle(const double angle, const int joint) {
   const int pulseWidth = calculatePulseWidth(angle, joint);
   servoDriver.setPWM(servoNumber, 0, pulseWidth);
 }
+
+// For debugging
+void setPulse(const int joint, const int pulseWidth) {
+  const int servoNumber = getServoNumberOnDriver(joint);
+  servoDriver.setPWM(servoNumber, 0, pulseWidth);
+}

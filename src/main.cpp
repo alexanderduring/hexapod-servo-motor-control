@@ -32,7 +32,8 @@ void setup() {
   setAngle(angleLoop, JOINT_LF3);
 
   Serial.println("Hexapod Servo Control Via Serial Monitor Version 2");
-  Serial.println("Send commands via Serial Monitor: loop(x,y) or stop.");
+  Serial.println("Send commands via Serial Monitor: pulse(n,p), loop(x,y) or stop.");
+  Serial.println("Pulse width should be 200-500.");
 }
 
 void loop() {
@@ -90,7 +91,7 @@ void loop() {
           }
           break;
         case ACTION_LOOP:
-          if (currentCommand[0] == ACTION_STOP) {
+          if (currentCommand[0] != ACTION_LOOP) {
             doLoop = true;
             angleStart = newCommand[1];
             angleEnd = newCommand[2];
@@ -102,6 +103,13 @@ void loop() {
             Serial.print(currentCommand[0]);
             Serial.println(" cannot be executed.");
           }
+          break;
+        case ACTION_PULSE:
+          doLoop = false;
+          setPulse(newCommand[1], newCommand[2]);
+          currentCommand[0] = newCommand[0];
+          currentCommand[1] = newCommand[1];
+          currentCommand[2] = newCommand[2];
           break;
         default:
           Serial.print("Command ");

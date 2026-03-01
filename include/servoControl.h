@@ -30,4 +30,11 @@ void initializeServoDriver();
 //   - PWM driver communication
 void setAngle(const double angle, const int joint);
 
+// Set the pulse width for a specific joint
+// For debugging and calibration
+// Parameters:
+//   joint - The joint number (0-17)
+//   pulseWidth - The desired pulse width (0-4095)
+void setPulse(const int joint, const int pulseWidth);
+
 #endif //HEXAPOD_SERVO_MOTOR_CONTROL_SERVOCONTROL_H

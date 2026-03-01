@@ -3,8 +3,9 @@
 #include <HardwareSerial.h>
 #include <WString.h>
 
-#define ACTION_STOP 0
-#define ACTION_LOOP 1
+#define ACTION_STOP  0
+#define ACTION_LOOP  1
+#define ACTION_PULSE 2
 
 // Define the variables declared as extern in commandLine.h
 const byte maxChars = 20;
@@ -89,6 +90,25 @@ void readNewCommand(String inputLine) {
         command = ACTION_LOOP;
         paramOne = inputLine.substring(posOpeningBracket+1, posComma).toInt();
         paramTwo = inputLine.substring(posComma+1, posClosingBracket).toInt();
+        hasNewCommand = true;
+    } else if (commandString == "pulse") {
+        // Validate that we have all required punctuation for pulse(n,p)
+        if (posOpeningBracket == -1 || posComma == -1 || posClosingBracket == -1) {
+            Serial.println("Error: Invalid pulse command format. Expected: pulse(n,p)");
+            hasNewCommand = false;
+            return;
+        }
+
+        // Validate order of punctuation
+        if (posOpeningBracket >= posComma || posComma >= posClosingBracket) {
+            Serial.println("Error: Invalid pulse command format. Expected: pulse(n,p)");
+            hasNewCommand = false;
+            return;
+        }
+
+        command = ACTION_PULSE;
+        paramOne = (int) inputLine.substring(posOpeningBracket + 1, posComma).toInt();
+        paramTwo = (int) inputLine.substring(posComma+1, posClosingBracket).toInt();
         hasNewCommand = true;
     } else {
         Serial.print("Error: Unknown command '");
