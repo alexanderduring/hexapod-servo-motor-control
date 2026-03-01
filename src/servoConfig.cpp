@@ -31,14 +31,5 @@ int getServoNumberOnDriver(int joint) {
     return -1;  // Return error code
   }
 
-  const int jointToDriverChannelMapping[18] = {
-    99,99,99, // Right front
-    99,99,99, // Right middle
-    99,99,99, // Right back
-    99,0,1, // Left front
-    99,99,99, // Left middle
-    99,99,99  // Left back
-  };
-
-  return jointToDriverChannelMapping[joint];
+  return JOINT_TO_DRIVER_CHANNEL[joint];
 }
