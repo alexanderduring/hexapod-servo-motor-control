@@ -11,11 +11,6 @@
 // The Servo Driver resolution splits those into 20.000 µs / 4096 = 4.8828125 µs steps
 // which we can use to configure our pulse width:
 // A setting of e.g. 190 corresponds to a pulse width of 190 steps * 4.88 µs = 928 µs
-
-#define SERVOMIN  300 // 150 // This is the 'minimum' pulse length count (out of 4096)
-#define SERVOMAX  500 // This is the 'maximum' pulse length count (out of 4096)
-#define USMIN  600 // This is the rounded 'minimum' microsecond length based on the minimum pulse of 150
-#define USMAX  2400 // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
 #define SERVO_FREQ 50 // Most analog servos are optimized for a pwm frequency of ~50 Hz.
 
 // ============================================================================
