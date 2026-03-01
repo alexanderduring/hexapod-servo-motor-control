@@ -24,6 +24,12 @@
 // Per-Servo Calibration Constants
 // ============================================================================
 
+// Left Front Leg - Joint 1
+#define SERVO_LF1_PULSEWIDTH_MIN 210             // -45 degrees
+#define SERVO_LF1_PULSEWIDTH_HORIZONTAL 311      //   0 degrees
+#define SERVO_LF1_PULSEWIDTH_MAX 432             //  45 degrees clockwise
+#define SERVO_LF1_PULSEWIDTH_PER_DEGREE 2.46666
+
 // Left Front Leg - Joint 2
 #define SERVO_LF2_PULSEWIDTH_MIN 238             // -45 degrees
 #define SERVO_LF2_PULSEWIDTH_HORIZONTAL 335      //   0 degrees
