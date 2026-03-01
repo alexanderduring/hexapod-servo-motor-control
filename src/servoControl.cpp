@@ -14,7 +14,7 @@ void initializeServoDriver() {
 }
 
 void setAngle(const double angle, const int joint) {
-  const int servoNumber = getServoNumber(joint);
+  const int servoNumber = getServoNumberOnDriver(joint);
 
   // Check if getServoNumber returned an error
   if (servoNumber < 0) {
