@@ -92,6 +92,8 @@ void loop() {
         case ACTION_LOOP:
           if (currentCommand[0] == ACTION_STOP) {
             doLoop = true;
+            angleStart = newCommand[1];
+            angleEnd = newCommand[2];
             currentCommand[0] = newCommand[0];
             currentCommand[1] = newCommand[1];
             currentCommand[2] = newCommand[2];
