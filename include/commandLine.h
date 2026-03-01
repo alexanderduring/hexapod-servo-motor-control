@@ -1,6 +1,7 @@
 #ifndef HEXAPOD_SERVO_MOTOR_CONTROL_COMMANDLINE_H
 #define HEXAPOD_SERVO_MOTOR_CONTROL_COMMANDLINE_H
 
+#include <Arduino.h>
 #include <WString.h>
 
 #define ACTION_STOP 0

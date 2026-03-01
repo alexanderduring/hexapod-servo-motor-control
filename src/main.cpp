@@ -1,3 +1,5 @@
+#include <HardwareSerial.h>
+
 #include "../include/commandLine.h"
 #include "../include/servoConfig.h"
 #include "../include/servoControl.h"
